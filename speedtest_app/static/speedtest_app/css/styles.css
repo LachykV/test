@@ -1,0 +1,73 @@
+.progress-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+@font-face {
+    font-family: 'Sansation';
+    src: url('/static/speedtest_app/fonts/Sansation-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+h1, h2, h3, p {
+    font-family: 'Sansation', sans-serif;
+    color: #373A43;
+}
+
+.loading-animation {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #fff;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes rotation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.glass-effect {
+    background: rgba(255,255,255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gradient-bg {
+     background: linear-gradient(to right, #C0C9D5, #DFE9F7);
+}
+
+.test-box {
+    background: #E1EBF5; /* light glass effect */
+    backdrop-filter: blur(10px);
+    border-radius: 1rem; /* 2xl rounded */
+    padding: 2rem; /* p-8 */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* strong shadow */
+    transition: transform 0.3s ease;
+}
+
+.result-box {
+    background: #E1EBF5;
+}
+
+.test-box:hover {
+    transform: scale(1.05);
+}
+.custom-button {
+    background-color: #373A43;
+}
+.custom-button:hover {
+    background-color: #2c2e35; /* darker on hover */
+}
+
+#internet-quality {
+    background-color: #e91e63; /* Pink */
+    color: white;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 20px;
+}

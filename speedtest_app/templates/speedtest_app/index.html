@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Internet Speed Test</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'speedtest_app/css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Work+Sans:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="gradient-bg text-white min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <h1 class="text-5xl font-bold text-center mb-12">
+            Internet Speed Test
+        </h1>
+
+        <!-- Flex layout -->
+        <div class="flex flex-col lg:flex-row gap-12">
+            <!-- Left side: Speed Test -->
+            <div class="flex-1 glass-effect rounded-2xl p-8 shadow-2xl">
+                <div class="space-y-8">
+                    <!-- Download Speed -->
+                    <div class="transform hover:scale-105 transition-transform duration-200 test-box">
+                        <h3 class="text-xl font-semibold mb-3 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="#0C28A6" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
+                            Download Speed
+                        </h3>
+                        <div class="w-full bg-gray-400 rounded-full h-4 overflow-hidden">
+                            <div id="download-progress" class="progress-bar bg-gradient-to-r from-blue-500 to-blue-400 h-4 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p id="download-speed" class="mt-2 text-lg">-- Mbps</p>
+                    </div>
+
+                    <!-- Upload Speed -->
+                    <div class="transform hover:scale-105 transition-transform duration-200 test-box">
+                        <h3 class="text-xl font-semibold mb-3 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="#0A6137" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                            </svg>
+                            Upload Speed
+                        </h3>
+                        <div class="w-full bg-gray-400 rounded-full h-4 overflow-hidden">
+                            <div id="upload-progress" class="progress-bar bg-gradient-to-r from-green-500 to-green-400 h-4 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p id="upload-speed" class="mt-2 text-lg">-- Mbps</p>
+                    </div>
+
+                    <!-- Ping -->
+                    <div class="transform hover:scale-105 transition-transform duration-200 test-box">
+                        <h3 class="text-xl font-semibold mb-3 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="yellow" stroke="#7D481A" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                            Ping
+                        </h3>
+                        <div class="w-full bg-gray-400 rounded-full h-4 overflow-hidden">
+                            <div id="ping-progress" class="progress-bar bg-gradient-to-r from-yellow-500 to-yellow-400 h-4 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p id="ping-value" class="mt-2 text-lg">-- ms</p>
+                    </div>
+                    <!-- Speed Test Analysis -->
+                    <div id="internet-quality" class="mt-6 p-4 result-box text-white rounded-lg text-center text-lg hidden transform hover:scale-105 transition-transform duration-200 ">
+                        <p><strong>Швидкість хороша:</strong> <span id="is-fast-text"></span></p>
+                        <p><strong>Оцінка:</strong> <span id="summary-text"></span></p>
+                    </div>
+                    <!-- Speed Test Button -->
+                    <button id="check-speed" class="w-full custom-button text-white font-bold py-4 px-6 rounded-xl transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">
+                        <span id="button-text">Start Speed Test</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right side: Previous Results -->
+            <div class="w-full lg:w-1/3">
+                <h2 class="text-2xl font-bold mb-3" style="color: #5A5F6E;">Previous Results</h2>
+
+                <!-- Download Buttons -->
+                <div class="mb-4">
+                    <a href="{% url 'speedtest_app:export_results' format='json' %}"
+                       class="inline-block custom-button mr-4 text-white font-semibold py-2 px-4 rounded-xl transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">
+                        Download JSON
+                    </a>
+                    <a href="{% url 'speedtest_app:export_results' format='csv' %}"
+                       class="inline-block custom-button text-white font-semibold py-2 px-4 rounded-xl transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">
+                        Download CSV
+                    </a>
+                </div>
+
+                <div class="space-y-4">
+                    {% for result in latest_results %}
+                    <div class="glass-effect result-box p-4 rounded-xl transform hover:scale-102 transition-transform duration-200">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="flex items-center"><span class="w-24">Download:</span> <span class="font-semibold">{{ result.download_speed|floatformat:2 }} Mbps</span></p>
+                                <p class="flex items-center"><span class="w-24">Upload:</span> <span class="font-semibold">{{ result.upload_speed|floatformat:2 }} Mbps</span></p>
+                                <p class="flex items-center"><span class="w-24">Ping:</span> <span class="font-semibold">{{ result.ping|floatformat:2 }} ms</span></p>
+                                <p class="flex items-center mt-2 text-sm text-blue-400">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    Server: {{ result.server_name }}, {{ result.server_country }}
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-400">{{ result.timestamp|date:"M j, Y, g:i a" }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const speedTestUrl = "{% url 'speedtest_app:check_speed' %}";
+    </script>
+    <script src="{% static 'speedtest_app/js/scripts.js' %}"></script>
+</body>
+</html>
