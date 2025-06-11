@@ -262,5 +262,45 @@
     "ping": 67.15,
     "is_fast": false,
     "summary": "Інтернет-з'єднання повільне або нестабільне."
+  },
+  {
+    "timestamp": "2025-06-11T10:44:26.219240",
+    "download_speed": 27.14,
+    "upload_speed": 55.8,
+    "ping": 17.84,
+    "is_fast": false,
+    "summary": "Інтернет-з'єднання повільне або нестабільне."
+  },
+  {
+    "timestamp": "2025-06-11T10:48:24.004992",
+    "download_speed": 30.85,
+    "upload_speed": 72.4,
+    "ping": 25.87,
+    "is_fast": false,
+    "summary": "Інтернет-з'єднання повільне або нестабільне."
+  },
+  {
+    "timestamp": "2025-06-11T10:53:28.507340",
+    "download_speed": 36.4,
+    "upload_speed": 74.53,
+    "ping": 16.92,
+    "is_fast": false,
+    "summary": "Інтернет-з'єднання повільне або нестабільне."
+  },
+  {
+    "timestamp": "2025-06-11T10:57:02.947178",
+    "download_speed": 100.0,
+    "upload_speed": 50.0,
+    "ping": 5,
+    "is_fast": true,
+    "summary": "Інтернет-з'єднання хороше."
+  },
+  {
+    "timestamp": "2025-06-11T10:58:33.756205",
+    "download_speed": 100.0,
+    "upload_speed": 50.0,
+    "ping": 5,
+    "is_fast": true,
+    "summary": "Інтернет-з'єднання хороше."
   }
 ]

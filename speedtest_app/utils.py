@@ -4,27 +4,6 @@ import os
 from datetime import datetime
 
 
-class SpeedTestResultData:
-    """
-    Helper class for storing speed test results.
-    Stores download speed, upload speed, ping, and the timestamp of the test.
-    """
-    def __init__(self, download_speed: float, upload_speed: float, ping: float):
-        self.download_speed = download_speed
-        self.upload_speed = upload_speed
-        self.ping = ping
-        self.timestamp = datetime.now()
-
-    def as_dict(self):
-        # Returns the result as a dictionary for later use (e.g., logging)
-        return {
-            'timestamp': self.timestamp.isoformat(),
-            'download_speed': round(self.download_speed, 2),
-            'upload_speed': round(self.upload_speed, 2),
-            'ping': round(self.ping, 2)
-        }
-
-
 class SpeedTestLogger:
     """
     Logger class to save speed test results into JSON or CSV files.
@@ -61,25 +40,25 @@ class SpeedTestLogger:
 class SpeedTestAnalyzer:
     """
     Core class for analyzing the speed test results.
-    Provides evaluation methods and export functionalities.
+    Provides evaluation methods.
     """
-    def __init__(self, download_speed, upload_speed, ping, timestamp=None):
+    def __init__(self, download_speed: float, upload_speed: float, ping: float):
         self.download_speed = download_speed
         self.upload_speed = upload_speed
         self.ping = ping
 
-    def is_fast_connection(self):
+    def is_fast_connection(self) -> bool:
         # Determines whether the connection is considered fast based on thresholds:
         # download >= 50 Mbps, upload >= 20 Mbps, ping <= 50 ms
         return self.download_speed >= 50 and self.upload_speed >= 20 and self.ping <= 50
 
-    def summary(self):
+    def summary(self) -> str:
         # Returns a textual assessment of the internet connection quality
         if self.is_fast_connection():
             return "Інтернет-з'єднання хороше."
         return "Інтернет-з'єднання повільне або нестабільне."
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         # Returns a dictionary with all test parameters, evaluation, and current timestamp
         return {
             'timestamp': datetime.now().isoformat(),
@@ -89,13 +68,3 @@ class SpeedTestAnalyzer:
             'is_fast': self.is_fast_connection(),
             'summary': self.summary()
         }
-
-    def export_to_json(self, file_path="speedtest_results.json"):
-        # Exports the current analysis to a JSON file using SpeedTestLogger
-        logger = SpeedTestLogger()
-        logger.log_to_json(self.to_dict(), file_path)
-
-    def export_to_csv(self, file_path="speedtest_results.csv"):
-        # Exports the current analysis to a CSV file using SpeedTestLogger
-        logger = SpeedTestLogger()
-        logger.log_to_csv(self.to_dict(), file_path)
